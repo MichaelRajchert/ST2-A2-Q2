@@ -1,39 +1,49 @@
-import java.util.HashSet;
-import java.util.Set;
-
+import java.util.ArrayList;
 /**
- * Java Program to find all permutations of a String
- * @author pankaj
+ * List permutation of a string
  *
- * adapted for U3161552 ST2 ASSIGNMENT 2 QUESTION 2
- * http://www.journaldev.com/526/java-program-to-find-all-permutations-of-a-string
- * 28/04/2017
+ * Based of jean.timex submission on Stackoverflow (http://stackoverflow.com/questions/4240080/generating-all-permutations-of-a-given-string)
  *
+ * @param s the input string
+ * @return  the list of permutation
+ *
+ * @param list a result of permutation, e.g. {"ab", "ba"}
+ * @param c    the last character
+ * @return     a merged new list, e.g. {"cab", "acb" ... }
  */
+
+
 public class permutationGenerator {
-    public static Set<String> permutationFinder(String str) {
-        Set<String> perm = new HashSet<String>();
-        //Handling error scenarios
-        if (str == null) {
-            return null;
-        } else if (str.length() == 0) {
-            perm.add("");
-            return perm;
+
+    public static ArrayList<String> permutation(String s) {
+        // The result
+        ArrayList<String> res = new ArrayList<String>();
+        // If input string's length is 1, return {s}
+        if (s.length() == 1) {
+            res.add(s);
+        } else if (s.length() > 1) {
+            int lastIndex = s.length() - 1;
+            // Find out the last character
+            String last = s.substring(lastIndex);
+            // Rest of the string
+            String rest = s.substring(0, lastIndex);
+            // Perform permutation on the rest string and
+            // merge with the last character
+            res = merge(permutation(rest), last);
         }
-        char initial = str.charAt(0); // first character
-        String rem = str.substring(1); // Full string without first character
-        Set<String> words = permutationFinder(rem);
-        for (String strNew : words) {
-            for (int i = 0;i<=strNew.length();i++){
-                perm.add(charInsert(strNew, initial, i));
+        return res;
+    }
+    public static ArrayList<String> merge(ArrayList<String> list, String c) {
+        ArrayList<String> res = new ArrayList<String>();
+        // Loop through all the string in the list
+        for (String s : list) {
+            // For each string, insert the last character to all possible postions
+            // and add them to the new list
+            for (int i = 0; i <= s.length(); ++i) {
+                String ps = new StringBuffer(s).insert(i, c).toString();
+                res.add(ps);
             }
         }
-        return perm;
-    }
-
-    public static String charInsert(String str, char c, int j) {
-        String begin = str.substring(0, j);
-        String end = str.substring(j);
-        return begin + c + end;
+        return res;
     }
 }

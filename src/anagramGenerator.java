@@ -1,7 +1,7 @@
 /**
  * Created by MichaelRajchert on 28/04/2017.
  */
-public class generateAnagram {
+public class anagramGenerator {
 
     public static void controller(){
         for (int i = 0; i < main.dictionary.size(); i++){
@@ -9,7 +9,6 @@ public class generateAnagram {
         }
     }
     public static String generator(String word){
-        String value = "";
-        return value;
+        return "".join(", " , main.SortFromDictionary(main.generatePerumation.permutation("caret")));
     }
 }
