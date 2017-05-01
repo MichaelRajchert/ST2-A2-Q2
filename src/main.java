@@ -7,16 +7,18 @@ import java.util.*;
  * Created by MichaelRajchert on 28/04/2017.
  */
 public class main {
-    public static anagramGenerator generateAnagram = new anagramGenerator();
-    public static permutationGenerator generatePerumation = new permutationGenerator();
+    public static permutationGenerator generatePermutation = new permutationGenerator();
+    public static debug debug = new debug();
 
     public static ArrayList<String> dictionary = new ArrayList<String>();
     public static HashMap anagramMap = new HashMap();
 
     public static void main(String[] args){
-       dictionary = importDictionary("shortwordlist.txt");
-       generateAnagram.controller();
-       System.out.println(anagramMap.get("agate"));
+        System.out.println("**START**");
+        dictionary = importDictionary("shortwordlist.txt");
+        anagramSetGenerator();
+        debug.printHashTable(anagramMap);
+        System.out.println("**END**");
     }
 
     public static ArrayList<String> importDictionary(String path){
@@ -42,7 +44,9 @@ public class main {
         for (int i = 0; i < array.size(); i++){
             try {
                 if (dictionary.contains(array.get(i)) == true){
-                    outputArray.add(array.get(i));
+                    if (outputArray.contains(array.get(i)) == false) {
+                        outputArray.add(array.get(i));
+                    }
                 }
             } catch(Exception e) {
                 Collections.sort(outputArray);
@@ -51,5 +55,14 @@ public class main {
         }
         Collections.sort(outputArray);
         return outputArray;
+    }
+
+    public static void anagramSetGenerator(){
+        for (int i = 0; i < main.dictionary.size(); i++) {
+            String output = "";
+            ArrayList<String> permutation = SortFromDictionary(generatePermutation.permutation(dictionary.get(i)));
+            output = output.join(", ", permutation);
+            anagramMap.put(dictionary.get(i), output);
+        }
     }
 }
