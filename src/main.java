@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -11,13 +9,17 @@ public class main {
     public static debug debug = new debug();
 
     public static ArrayList<String> dictionary = new ArrayList<String>();
-    public static HashMap anagramMap = new HashMap();
+    public static Hashtable anagramMap = new Hashtable();
 
     public static void main(String[] args){
         System.out.println("**START**");
         dictionary = importDictionary("shortwordlist.txt");
         anagramSetGenerator();
-        debug.printHashTable(anagramMap);
+        try {
+            writeFile("anagramlist.txt", anagramMap, false);
+        } catch (IOException e){
+            System.out.println("ERROR: Unable to locate output file. \n -------------Error dump------------- \n" + e);
+        }
         System.out.println("**END**");
     }
 
@@ -37,6 +39,14 @@ public class main {
             System.out.print("ERROR: File not found, please input correct file path. \nError Dump: \n" + e);
         }
         return null;
+    }
+    public static void writeFile(String path, Hashtable<String, String> hashTable, boolean appendToFile) throws IOException{
+        FileWriter fileWriter = new FileWriter(path, appendToFile);
+        PrintWriter printWriter = new PrintWriter(fileWriter);
+        for (int i = 0; i < hashTable.size(); i++) {
+            printWriter.println(hashTable.keySet().toArray()[i] + " = " + hashTable.get(hashTable.keySet().toArray()[i]));
+        }
+        printWriter.close();
     }
 
     public static ArrayList<String> SortFromDictionary(ArrayList<String> array){
