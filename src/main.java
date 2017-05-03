@@ -5,24 +5,15 @@ import java.util.*;
  * Created by MichaelRajchert on 28/04/2017.
  */
 public class main {
-    public static permutationGenerator generatePermutation = new permutationGenerator();
-    public static debug debug = new debug();
+    public static ArrayList<String> dictionary = new ArrayList<>();
+    public static Hashtable<String, ArrayList<String>> validAnagram = new Hashtable<>();
 
-    public static ArrayList<String> dictionary = new ArrayList<String>();
-    public static Hashtable anagramMap = new Hashtable();
-
+    public static String inputPath = "shortwordlist.txt";
+    public static String outputPath = "anagramlist.txt";
     public static void main(String[] args){
-        System.out.println("**START**");
-        dictionary = importDictionary("shortwordlist.txt");
-        anagramSetGenerator();
-        try {
-            writeFile("anagramlist.txt", anagramMap, false);
-        } catch (IOException e){
-            System.out.println("ERROR: Unable to locate output file. \n -------------Error dump------------- \n" + e);
-        }
-        System.out.println("**END**");
+        dictionary = importDictionary(inputPath);
+        produceLetterSortedWords();
     }
-
     public static ArrayList<String> importDictionary(String path){
         try {
             ArrayList<String> fileData = new ArrayList<String>();
@@ -49,30 +40,21 @@ public class main {
         printWriter.close();
     }
 
-    public static ArrayList<String> SortFromDictionary(ArrayList<String> array){
-        ArrayList<String> outputArray = new ArrayList<String>();
-        for (int i = 0; i < array.size(); i++){
-            try {
-                if (dictionary.contains(array.get(i)) == true){
-                    if (outputArray.contains(array.get(i)) == false) {
-                        outputArray.add(array.get(i));
-                    }
-                }
-            } catch(Exception e) {
-                Collections.sort(outputArray);
-                return outputArray;
+    public static void produceLetterSortedWords(){
+        for (int i = 0; i < dictionary.size(); i++){
+            String value = dictionary.get(i);
+            char[] keyArray = value.toCharArray();
+            Arrays.sort(keyArray);
+            String key = new String (keyArray);
+            if (!validAnagram.containsKey(key)){
+                System.out.println("Adding new arraylist for: " + new String(key));
+                validAnagram.put(key, new ArrayList<String>());
             }
+            validAnagram.get(key).add(value);
         }
-        Collections.sort(outputArray);
-        return outputArray;
-    }
-
-    public static void anagramSetGenerator(){
-        for (int i = 0; i < main.dictionary.size(); i++) {
-            String output = "";
-            ArrayList<String> permutation = SortFromDictionary(generatePermutation.permutation(dictionary.get(i)));
-            output = output.join(", ", permutation);
-            anagramMap.put(dictionary.get(i), output);
+        System.out.println();
+        for (String key : validAnagram.keySet()){
+            System.out.println(key + ", " + validAnagram.get(key));
         }
     }
 }
