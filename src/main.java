@@ -8,11 +8,17 @@ public class main {
     public static ArrayList<String> dictionary = new ArrayList<>();
     public static Hashtable<String, ArrayList<String>> validAnagram = new Hashtable<>();
 
-    public static String inputPath = "shortwordlist.txt";
+    public static String inputPath = "wordlist.txt";
     public static String outputPath = "anagramlist.txt";
     public static void main(String[] args){
         dictionary = importDictionary(inputPath);
         produceLetterSortedWords();
+        try {
+            writeFile(outputPath, validAnagram, false);
+        }
+        catch (IOException e){
+            System.out.println("ERROR: Failed to output to anagramlist.txt");
+        }
     }
     public static ArrayList<String> importDictionary(String path){
         try {
@@ -31,11 +37,13 @@ public class main {
         }
         return null;
     }
-    public static void writeFile(String path, Hashtable<String, String> hashTable, boolean appendToFile) throws IOException{
+    public static void writeFile(String path, Hashtable<String, ArrayList<String>> hashTable, boolean appendToFile) throws IOException{
         FileWriter fileWriter = new FileWriter(path, appendToFile);
         PrintWriter printWriter = new PrintWriter(fileWriter);
-        for (int i = 0; i < hashTable.size(); i++) {
-            printWriter.println(hashTable.keySet().toArray()[i] + " = " + hashTable.get(hashTable.keySet().toArray()[i]));
+        int i = 1;
+        for (String key : hashTable.keySet()){
+            printWriter.println("Anagram " + i + ": " + printAsString(hashTable.get(key)));
+            i++;
         }
         printWriter.close();
     }
@@ -47,14 +55,17 @@ public class main {
             Arrays.sort(keyArray);
             String key = new String (keyArray);
             if (!validAnagram.containsKey(key)){
-                System.out.println("Adding new arraylist for: " + new String(key));
                 validAnagram.put(key, new ArrayList<String>());
             }
             validAnagram.get(key).add(value);
         }
-        System.out.println();
+        int i = 1;
         for (String key : validAnagram.keySet()){
-            System.out.println(key + ", " + validAnagram.get(key));
+            System.out.println("Anagram " + i + ": " + printAsString(validAnagram.get(key)));
+            i++;
         }
+    }
+    public static String printAsString(ArrayList<String> input){
+        return "".join(", ", input);
     }
 }
