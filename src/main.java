@@ -42,7 +42,9 @@ public class main {
         PrintWriter printWriter = new PrintWriter(fileWriter);
         int i = 1;
         for (String key : hashTable.keySet()){
-            printWriter.println("Anagram " + i + ": " + printAsString(hashTable.get(key)));
+            if (hashTable.get(key).size() > 1) {
+                printWriter.println("Anagram " + i + ": " + printAsString(hashTable.get(key)));
+            }
             i++;
         }
         printWriter.close();
@@ -58,11 +60,6 @@ public class main {
                 validAnagram.put(key, new ArrayList<String>());
             }
             validAnagram.get(key).add(value);
-        }
-        int i = 1;
-        for (String key : validAnagram.keySet()){
-            System.out.println("Anagram " + i + ": " + printAsString(validAnagram.get(key)));
-            i++;
         }
     }
     public static String printAsString(ArrayList<String> input){
