@@ -1,8 +1,12 @@
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Hashtable;
 
 /**
  * Created by MichaelRajchert on 28/04/2017.
+ *
+ * For ST2-ASSIGNMENT2-Q2
  */
 public class main {
     public static ArrayList<String> dictionary = new ArrayList<>();
@@ -44,8 +48,8 @@ public class main {
         for (String key : hashTable.keySet()){
             if (hashTable.get(key).size() > 1) {
                 printWriter.println("Anagram " + i + ": " + printAsString(hashTable.get(key)));
+                i++;
             }
-            i++;
         }
         printWriter.close();
     }
